@@ -17,6 +17,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Vega.Data;
+using Vega.Interfaces;
+using Vega.Services;
 
 namespace Vega
 {
@@ -32,17 +34,21 @@ namespace Vega
         {
 
             services.AddControllers();
-            services.AddDbContext<VegaContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddHangfire(configuration => {
-                configuration.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection"));
+            services.AddDbContext<VegaContext>(opitons => opitons.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")))
+                .AddScoped<IUserService, UserService>();
+            
+            services.AddHangfire(configuration =>
+            {
+                configuration.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnectionString"));
             });
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Vega", Version = "v1" });
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => 
+                .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
