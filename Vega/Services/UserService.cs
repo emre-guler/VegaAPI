@@ -28,7 +28,7 @@ namespace Vega.Services
                 bool passwordControl = BCrypt.Net.BCrypt.Verify(model.Password, user.Password);
                 if (passwordControl)
                 {
-                    // Create JWT 
+                    return user;
                 }
             }
             return null;

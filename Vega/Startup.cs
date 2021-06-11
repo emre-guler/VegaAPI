@@ -35,7 +35,8 @@ namespace Vega
 
             services.AddControllers();
             services.AddDbContext<VegaContext>(opitons => opitons.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")))
-                .AddScoped<IUserService, UserService>();
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<IJwtService, JwtService>();
             
             services.AddHangfire(configuration =>
             {
