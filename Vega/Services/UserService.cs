@@ -18,7 +18,7 @@ namespace Vega.Services
             _db = db;
         }
 
-        public async Task<User> LoginControl(LoginViewModel model)
+        public async Task<User> Login(LoginViewModel model)
         {
             User user = await _db.Users
                 .Where(x => x.PhoneNumber == model.PhoneNumber)

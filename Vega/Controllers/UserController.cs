@@ -35,7 +35,7 @@ namespace Vega.Controllers
         {
             if (!string.IsNullOrEmpty(loginData.PhoneNumber) && !string.IsNullOrEmpty(loginData.Password))
             {
-                User user = await _userService.LoginControl(loginData);
+                User user = await _userService.Login(loginData);
                 if (user is not null)
                 {
                     string userJWT = _jwtService.Create(user);
