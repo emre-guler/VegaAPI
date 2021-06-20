@@ -7,5 +7,6 @@ namespace Vega.Interfaces
     public interface IUserService
     {
         Task<User> Login(LoginViewModel model);
+        Task<bool> Register(RegisterViewModel model); 
     }
 }

@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Vega.Data;
 using Vega.Entities;
+using Vega.Enums;
 using Vega.Interfaces;
 using Vega.Models;
 
@@ -32,6 +34,33 @@ namespace Vega.Services
                 }
             }
             return null;
+        }
+
+        public async Task<bool> Register(RegisterViewModel model)
+        {
+            bool userExist = await _db.Users
+                .Where(x => x.MailAddress == model.MailAddress || x.PhoneNumber == model.PhoneNumber)
+                .AnyAsync();
+            if (!userExist)
+            {
+                model.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
+                await _db.AddAsync(new User {
+                    Fullname = model.Fullname,
+                    MailAddress =  model.MailAddress,
+                    Password = model.Password,
+                    PhoneNumber = model.PhoneNumber,
+                    Role = Role.Player,
+                    Money = 0,
+                    CreatedAt = DateTime.Now
+                });
+                await _db.SaveChangesAsync();
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

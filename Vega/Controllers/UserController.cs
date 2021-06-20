@@ -30,6 +30,7 @@ namespace Vega.Controllers
             _jwtService = jwtService;
         }
 
+        [AllowAnonymous]
         [HttpPost("/login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel loginData)
         {
@@ -42,10 +43,29 @@ namespace Vega.Controllers
                     Response.Cookies.Append("vegaJWT", userJWT, new CookieOptions {
                         HttpOnly = true
                     });
-                    return Ok();
+                    return Ok(userJWT);
                 }
             }
             return StatusCode((int)ErrorCode.InvalidCredentials, "Invalid Credentials");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("/register")]
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel registerData)
+        {
+            if (!string.IsNullOrEmpty(registerData.Fullname) && !string.IsNullOrEmpty(registerData.MailAddress) && !string.IsNullOrEmpty(registerData.Password) && !string.IsNullOrEmpty(registerData.PhoneNumber))
+            {
+                bool registerResult = await _userService.Register(registerData);
+                if (registerResult)
+                {
+                    return Ok(true);
+                }
+                else 
+                {
+                    return StatusCode((int)ErrorCode.AlreadyExist, "This user already exist.");
+                }
+            }
+            return StatusCode((int)ErrorCode.MustBeFilled, "All fields must be filled correctly.");
         }
     }
 }

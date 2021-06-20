@@ -24,7 +24,7 @@ namespace Vega.Services
         public string Create (User user)
         {
             SymmetricSecurityKey secureKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecureKey"]));
-            SigningCredentials credentials = new SigningCredentials(secureKey, SecurityAlgorithms.HmacSha256);
+            SigningCredentials credentials = new SigningCredentials(secureKey, SecurityAlgorithms.HmacSha256Signature);
             
             List<Claim> claims = new() 
             {
