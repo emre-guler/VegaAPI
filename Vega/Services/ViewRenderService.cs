@@ -9,11 +9,15 @@ using Microsoft.AspNetCore.Routing;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Vega.Interfaces;
 
 namespace Vega.Services
 {
-    public class ViewRenderService
+    public interface IViewRenderService
+    {
+        Task<string> RenderToStringAsync(string viewName, object model);
+    }
+
+    public class ViewRenderService : IViewRenderService
     {
         private readonly IRazorViewEngine _razorViewEngine;
         private readonly ITempDataProvider _tempDataProvider;

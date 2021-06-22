@@ -52,7 +52,7 @@ namespace Vega.Controllers
         [HttpPost("/register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel registerData)
         {
-            if (!string.IsNullOrEmpty(registerData.Fullname) && !string.IsNullOrEmpty(registerData.MailAddress) && !string.IsNullOrEmpty(registerData.Password) && !string.IsNullOrEmpty(registerData.PhoneNumber) && registerData.BirthDate != null)
+            if (!string.IsNullOrEmpty(registerData.Fullname) && !string.IsNullOrEmpty(registerData.MailAddress) && !string.IsNullOrEmpty(registerData.Password) && !string.IsNullOrEmpty(registerData.PhoneNumber))
             {
                 bool registerResult = await _userService.Register(registerData);
                 if (registerResult)

@@ -32,6 +32,8 @@ namespace Vega
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
+            services.AddRazorPages();
             services.AddControllers();
             services.AddDbContext<VegaContext>(opitons => opitons.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")))
                 .AddScoped<IUserService, UserService>()
