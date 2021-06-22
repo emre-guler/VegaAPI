@@ -54,7 +54,8 @@ namespace Vega.Services
                     PhoneNumber = model.PhoneNumber,
                     Role = Role.Player,
                     Money = 0,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    BirthDate = model.BirthDate
                 });
                 await _db.SaveChangesAsync();
                 await _mailService.SendRegisterMail(model.MailAddress);

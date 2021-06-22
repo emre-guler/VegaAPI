@@ -9,11 +9,11 @@ namespace Vega.Services
 {
     public class MailService : IMailService
     {
-        private IViewRenderService _viewRenderService;
+        private ViewRenderService _viewRenderService;
         private IConfiguration Configuration { get; }
         private SmtpClient mailServer;
         private MailMessage mailMessage;
-        public MailService(IConfiguration configuration, IViewRenderService viewRenderService)
+        public MailService(IConfiguration configuration, ViewRenderService viewRenderService)
         {
             Configuration = configuration;
             _viewRenderService = viewRenderService;

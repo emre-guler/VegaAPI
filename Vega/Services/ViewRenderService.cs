@@ -13,7 +13,7 @@ using Vega.Interfaces;
 
 namespace Vega.Services
 {
-    public class ViewRenderService : IViewRenderService
+    public class ViewRenderService
     {
         private readonly IRazorViewEngine _razorViewEngine;
         private readonly ITempDataProvider _tempDataProvider;
