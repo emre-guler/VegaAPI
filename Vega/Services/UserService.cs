@@ -12,12 +12,15 @@ namespace Vega.Services
 {
     public class UserService : IUserService
     {
-        private readonly VegaContext _db; 
+        private readonly VegaContext _db;
+        private readonly IMailService _mailService; 
         public UserService(
-            VegaContext db
+            VegaContext db,
+            IMailService mailService
         )
         {
             _db = db;
+            _mailService = mailService;
         }
 
         public async Task<User> Login(LoginViewModel model)
@@ -54,7 +57,8 @@ namespace Vega.Services
                     CreatedAt = DateTime.Now
                 });
                 await _db.SaveChangesAsync();
-                
+                await _mailService.SendRegisterMail(model.MailAddress);
+
                 return true;
             }
             else

@@ -10,7 +10,6 @@ using Vega.Models;
 
 namespace Vega.Controllers
 {
-    [AllowAnonymous]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
@@ -67,5 +66,6 @@ namespace Vega.Controllers
             }
             return StatusCode((int)ErrorCode.MustBeFilled, "All fields must be filled correctly.");
         }
+
     }
 }
