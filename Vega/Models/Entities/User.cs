@@ -1,3 +1,4 @@
+using System;
 using Vega.Enums;
 
 namespace Vega.Entities
@@ -11,5 +12,6 @@ namespace Vega.Entities
         public string ProfilePhoto { get; set; }
         public int Money { get; set; }
         public Role Role { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 }
