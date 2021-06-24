@@ -39,6 +39,7 @@ namespace Vega
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IJwtService, JwtService>()
                 .AddScoped<IMailService, MailService>()
+                .AddScoped<IMethodService, MethodService>()
                 .AddScoped<ViewRenderService>();
             
             services.AddHangfire(configuration =>

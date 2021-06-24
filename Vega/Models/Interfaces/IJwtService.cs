@@ -1,11 +1,12 @@
-using System.Threading.Tasks;
+using System.Security.Claims;
+using Vega.DTO;
 using Vega.Entities;
-using Vega.Models;
 
 namespace Vega.Interfaces
 {
     public interface IJwtService
     {
         string Create(User user);
+        JwtClaimDto ReadToken(ClaimsIdentity claims);
     }
 }

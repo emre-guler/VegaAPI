@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Vega.Data;
+using Vega.DTO;
 using Vega.Entities;
+using Vega.Enums;
 using Vega.Interfaces;
 
 namespace Vega.Services
@@ -43,6 +46,32 @@ namespace Vega.Services
             string encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
             
             return encodedToken;
+        }
+
+        public JwtClaimDto ReadToken(ClaimsIdentity claims)
+        {
+            try
+            {
+                var claimsList = claims.Claims.ToList();
+                if (claimsList.Count() != 0)
+                {
+                    JwtClaimDto jwtData = new()
+                    {
+                        Id = int.Parse(claimsList[0].Value),
+                        Role = (Role) int.Parse(claimsList[1].Value)
+                    };
+
+                    return jwtData;
+                }
+                
+                return null;
+            }
+            catch(Exception e)
+            {
+                Console.Write(e);
+            }
+
+            return null;
         }
     }
 }

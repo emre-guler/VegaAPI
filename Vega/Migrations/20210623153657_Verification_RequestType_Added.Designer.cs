@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vega.Data;
 
 namespace Vega.Migrations
 {
     [DbContext(typeof(VegaContext))]
-    partial class VegaContextModelSnapshot : ModelSnapshot
+    [Migration("20210623153657_Verification_RequestType_Added")]
+    partial class Verification_RequestType_Added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,12 +254,7 @@ namespace Vega.Migrations
                     b.Property<string>("URL")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Verifications");
                 });
@@ -309,17 +306,6 @@ namespace Vega.Migrations
                     b.Navigation("Question");
 
                     b.Navigation("Ticket");
-                });
-
-            modelBuilder.Entity("Vega.Entities.Verification", b =>
-                {
-                    b.HasOne("Vega.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

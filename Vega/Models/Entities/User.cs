@@ -13,5 +13,6 @@ namespace Vega.Entities
         public int Money { get; set; }
         public Role Role { get; set; }
         public DateTime BirthDate { get; set; }
+        public bool MailVerify { get; set; }
     }
 }
