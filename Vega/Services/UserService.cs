@@ -87,22 +87,22 @@ namespace Vega.Services
 
         public async Task MailVerification(int Id)
         {
-            Verification verification = new() 
+            Request request = new() 
             {
                 URL = await _methodService.GenerateURL(),
                 Code = _methodService.GenerateRandomNumber(),
                 RequestType = RequestType.MailVerification,
                 CreatedAt = DateTime.Now
             };
-            await _db.AddAsync(verification);
+            await _db.AddAsync(request);
             await _db.SaveChangesAsync();
-            await _mailService.SendVerificationMail(Id, verification);
+            await _mailService.SendVerificationMail(Id, request);
         }
 
         public async Task<bool> ControlVerfiyPage(int Id, string URL)
         {
-            Verification verificationData = await _db.Verifications.Where(x => !x.DeletedAt.HasValue && x.URL == URL && x.RequestType == RequestType.MailVerification && x.CreatedAt.Value.AddHours(1) > DateTime.Now && x.UserId == Id).FirstOrDefaultAsync();
-            if(verificationData is not null)
+            Request requestData = await _db.Requests.Where(x => !x.DeletedAt.HasValue && x.URL == URL && x.RequestType == RequestType.MailVerification && x.CreatedAt.Value.AddHours(1) > DateTime.Now && x.UserId == Id).FirstOrDefaultAsync();
+            if(requestData is not null)
             {
                 return true;
             }
@@ -112,7 +112,7 @@ namespace Vega.Services
 
         public async Task<bool> ControlVerifyCode(int Id, string URL, int code)
         {
-            Verification verificationData = await _db.Verifications
+            Request requestData = await _db.Requests
                 .Where(x => 
                     !x.DeletedAt.HasValue &&
                     x.URL == URL &&
@@ -121,7 +121,7 @@ namespace Vega.Services
                     x.UserId == Id &&
                     x.Code == code
                 ).FirstOrDefaultAsync();
-            if(verificationData is not null)
+            if(requestData is not null)
             {
                 User userData = await _db.Users.Where(x => x.Id == Id).FirstOrDefaultAsync();
                 if (userData is not null)
@@ -131,6 +131,28 @@ namespace Vega.Services
                     return true;
                 }
             }
+            return false;
+        }
+
+        public async Task<bool> ResetPasswordRequest(string mailAddress)
+        {
+            User userData = await _db.Users.FirstOrDefaultAsync(x => !x.DeletedAt.HasValue && x.MailAddress == mailAddress);
+
+            if (userData is not null)
+            {
+                Request requestData = new() 
+                {
+                    UserId = userData.Id,
+                    URL = await _methodService.GenerateURL(),
+                    RequestType = RequestType.ResetPassword,
+                    CreatedAt= DateTime.Now
+                };
+                await _db.AddAsync(requestData);
+                await _db.SaveChangesAsync();
+                await _mailService.SendResetPasswordMail(userData, requestData);
+                return true;
+            }
+            
             return false;
         }
     }

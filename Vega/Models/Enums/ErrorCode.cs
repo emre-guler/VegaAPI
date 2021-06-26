@@ -8,6 +8,7 @@ namespace Vega.Enums
         AlreadyExist = 457,
         AlreadyVerified = 458,
         LinkExpired = 459,
-        InvalidCode = 460
+        InvalidCode = 460,
+        NotFound = 461
     }
 }

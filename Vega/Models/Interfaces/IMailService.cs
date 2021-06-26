@@ -6,6 +6,7 @@ namespace Vega.Interfaces
     public interface IMailService 
     {
         Task SendRegisterMail(string mailAddress);
-        Task SendVerificationMail(int Id, Verification verificationData);
+        Task SendVerificationMail(int Id, Request requestData);
+        Task SendResetPasswordMail(User userData, Request requestData);
     }
 }

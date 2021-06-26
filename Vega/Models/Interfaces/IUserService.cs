@@ -12,5 +12,6 @@ namespace Vega.Interfaces
         Task MailVerification(int Id);
         Task<bool> ControlVerfiyPage(int Id, string URL);
         Task<bool> ControlVerifyCode(int Id, string URL, int code);
+        Task<bool> ResetPasswordRequest(string mailAddress);
     }
 }

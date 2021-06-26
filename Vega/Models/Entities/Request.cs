@@ -3,7 +3,7 @@ using Vega.Enums;
 
 namespace Vega.Entities
 {
-    public class Verification : BaseEntity
+    public class Request : BaseEntity
     {
         public int Code { get; set; }
         public string URL { get; set; }

@@ -28,7 +28,7 @@ namespace Vega.Services
                 string randomString = new String(Enumerable.Repeat(chars, stringLength)
                     .Select(s => s[random.Next(s.Length)]).ToArray());
                 
-                if(await _db.Verifications.AnyAsync(x => x.URL == randomString))
+                if(await _db.Requests.AnyAsync(x => x.URL == randomString))
                 {
                     continue;
                 }

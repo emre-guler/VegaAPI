@@ -72,6 +72,26 @@ namespace Vega.Controllers
             return StatusCode((int)ErrorCode.MustBeFilled, "All fields must be filled correctly.");
         }
 
+        [AllowAnonymous]
+        [HttpPost("/reset-password-request")]
+        public async Task<IActionResult> PasswordResetRequest([FromBody] string userMailAddress)
+        {
+            if (!string.IsNullOrEmpty(userMailAddress))
+            {
+                bool resetResult = await _userService.ResetPasswordRequest(userMailAddress);
+                if (resetResult)
+                {
+                    return Ok(true);
+                }
+                else
+                {
+                    return StatusCode((int)ErrorCode.NotFound, "User not found.");
+                }
+            }
+            
+            return StatusCode((int) ErrorCode.MustBeFilled, "All fields must be filled correctly.");
+        }
+
         [Authorize]
         [HttpPost("/mail-verification-request")]
         public async Task<IActionResult> MailVerificationRequest()

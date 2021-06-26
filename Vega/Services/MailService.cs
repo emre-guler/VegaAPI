@@ -45,11 +45,19 @@ namespace Vega.Services
             await mailServer.SendMailAsync(mailMessage);
         }
 
-        public async Task SendVerificationMail(int Id, Verification verificationData)
+        public async Task SendVerificationMail(int Id, Request requestData)
         {
             User userData = await _db.Users.FirstOrDefaultAsync(x => x.Id == Id && !x.DeletedAt.HasValue);
             mailMessage.Subject = "Vega | Mail Verification";
-            mailMessage.Body = await _viewRenderService.RenderToStringAsync("~/Mailing/MailVerification.cshtml", verificationData);
+            mailMessage.Body = await _viewRenderService.RenderToStringAsync("~/Mailing/MailVerification.cshtml", requestData);
+            mailMessage.To.Add(userData.MailAddress);
+            await mailServer.SendMailAsync(mailMessage);
+        }
+
+        public async Task SendResetPasswordMail(User userData, Request requestData)
+        {
+            mailMessage.Subject = "Vega | Reset Password";
+            mailMessage.Body = await _viewRenderService.RenderToStringAsync("~/Mailing/ResetPassword.cshtml", requestData);
             mailMessage.To.Add(userData.MailAddress);
             await mailServer.SendMailAsync(mailMessage);
         }

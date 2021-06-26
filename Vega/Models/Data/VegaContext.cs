@@ -21,6 +21,6 @@ namespace Vega.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketQuestion> TicketQuestions { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Verification> Verifications { get; set; }
+        public DbSet<Request> Requests { get; set; }
     }
 }
