@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -40,8 +41,11 @@ namespace Vega
                 .AddScoped<IJwtService, JwtService>()
                 .AddScoped<IMailService, MailService>()
                 .AddScoped<IMethodService, MethodService>()
+                .AddScoped<IContentService, ContentService>()
                 .AddScoped<ViewRenderService>();
             
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddHangfire(configuration =>
             {
                 configuration.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnectionString"));
