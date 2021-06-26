@@ -101,7 +101,7 @@ namespace Vega.Services
 
         public async Task<bool> ControlVerfiyPage(int Id, string URL)
         {
-            Request requestData = await _db.Requests.Where(x => !x.DeletedAt.HasValue && x.URL == URL && x.RequestType == RequestType.MailVerification && x.CreatedAt.Value.AddHours(1) > DateTime.Now && x.UserId == Id).FirstOrDefaultAsync();
+            Request requestData = await _db.Requests.Where(x => !x.DeletedAt.HasValue && x.URL == URL && x.RequestType == RequestType.MailVerification && x.CreatedAt.Value.AddHours(1) > DateTime.Now && x.UserId == Id).LastOrDefaultAsync();
             if(requestData is not null)
             {
                 return true;
@@ -120,7 +120,7 @@ namespace Vega.Services
                     x.CreatedAt.Value.AddHours(1) > DateTime.Now && 
                     x.UserId == Id &&
                     x.Code == code
-                ).FirstOrDefaultAsync();
+                ).LastOrDefaultAsync();
             if(requestData is not null)
             {
                 User userData = await _db.Users.Where(x => x.Id == Id).FirstOrDefaultAsync();
