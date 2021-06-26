@@ -74,11 +74,11 @@ namespace Vega.Controllers
 
         [AllowAnonymous]
         [HttpPost("/reset-password-request")]
-        public async Task<IActionResult> PasswordResetRequest([FromBody] string userMailAddress)
+        public async Task<IActionResult> ResetPasswordRequest([FromBody] string userMailAddress)
         {
             if (!string.IsNullOrEmpty(userMailAddress))
             {
-                bool resetResult = await _userService.ResetPasswordRequest(userMailAddress);
+                bool resetResult = await _userService.RestPasswordRequest(userMailAddress);
                 if (resetResult)
                 {
                     return Ok(true);
@@ -89,6 +89,43 @@ namespace Vega.Controllers
                 }
             }
             
+            return StatusCode((int) ErrorCode.MustBeFilled, "All fields must be filled correctly.");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("/reset-password/{hashedData}/{userId}")]
+        public async Task<IActionResult> ResetPasswordPage(string hashedData, int userId)
+        {
+            if (!string.IsNullOrEmpty(hashedData) && userId != 0)
+            {
+                bool pageControl = await _userService.ResetPasswordPage(userId, hashedData);
+                if (pageControl)
+                {
+                    return Ok(true);
+                }
+
+                return StatusCode((int) ErrorCode.LinkExpired, "Link expired.");
+            }
+
+            return StatusCode((int) ErrorCode.MustBeFilled, "All fields must be filled correctly.");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("/mail-verification/{hashedData}/{userId}")]
+        public async Task<IActionResult>  ResetPassword(string hashedData, int userId, [FromBody] string newPassword)
+        {
+            if (!string.IsNullOrEmpty(hashedData) && userId != 0 && !string.IsNullOrEmpty(newPassword))
+            {
+                bool pageControl = await _userService.ResetPasswordPage(userId, hashedData);
+                if (pageControl)
+                {
+                    await _userService.ResetPassword(userId, hashedData, newPassword);
+                    return Ok(true);
+                }
+
+                return StatusCode((int) ErrorCode.LinkExpired, "Link expired.");
+            }
+
             return StatusCode((int) ErrorCode.MustBeFilled, "All fields must be filled correctly.");
         }
 
@@ -103,7 +140,7 @@ namespace Vega.Controllers
                 bool userControl = await _userService.IsVerified(userData.Id);
                 if(userControl)
                 {
-                    await _userService.MailVerification(userData.Id);
+                    await _userService.MailVerificationRequest(userData.Id);
                     return Ok(true);
                 }
                 else
@@ -123,7 +160,7 @@ namespace Vega.Controllers
             JwtClaimDto userData = _jwtService.ReadToken(userClaims);
             if (userData is not null)
             {
-                bool verifyPageControl = await _userService.ControlVerfiyPage(userData.Id, hashedData);
+                bool verifyPageControl = await _userService.VerfiyPage(userData.Id, hashedData);
                 if (verifyPageControl)
                 {
                     return Ok(true);
@@ -136,17 +173,17 @@ namespace Vega.Controllers
         }
 
         [Authorize]
-        [HttpPost("/mail-verification{hashedData}")]
-        public async Task<IActionResult> MailVerification(string hashedData, int code)
+        [HttpPost("/mail-verification/{hashedData}")]
+        public async Task<IActionResult> MailVerification(string hashedData, [FromBody] int code)
         {
             ClaimsIdentity userClaims = HttpContext.User.Identity as ClaimsIdentity;
             JwtClaimDto userData = _jwtService.ReadToken(userClaims);
             if (userData is not null)
             {
-                bool verifyPageControl = await _userService.ControlVerfiyPage(userData.Id, hashedData);
+                bool verifyPageControl = await _userService.VerfiyPage(userData.Id, hashedData);
                 if (verifyPageControl)
                 {
-                    bool codeControl = await _userService.ControlVerifyCode(userData.Id, hashedData, code);
+                    bool codeControl = await _userService.VerifyUser(userData.Id, hashedData, code);
                     if (codeControl)
                     {
                         return Ok(true);

@@ -85,7 +85,7 @@ namespace Vega.Services
             }
         }
 
-        public async Task MailVerification(int Id)
+        public async Task MailVerificationRequest(int Id)
         {
             Request request = new() 
             {
@@ -99,7 +99,7 @@ namespace Vega.Services
             await _mailService.SendVerificationMail(Id, request);
         }
 
-        public async Task<bool> ControlVerfiyPage(int Id, string URL)
+        public async Task<bool> VerfiyPage(int Id, string URL)
         {
             Request requestData = await _db.Requests.Where(x => !x.DeletedAt.HasValue && x.URL == URL && x.RequestType == RequestType.MailVerification && x.CreatedAt.Value.AddHours(1) > DateTime.Now && x.UserId == Id).LastOrDefaultAsync();
             if(requestData is not null)
@@ -110,7 +110,7 @@ namespace Vega.Services
             return false;
         }
 
-        public async Task<bool> ControlVerifyCode(int Id, string URL, int code)
+        public async Task<bool> VerifyUser(int Id, string URL, int code)
         {
             Request requestData = await _db.Requests
                 .Where(x => 
@@ -135,7 +135,7 @@ namespace Vega.Services
             return false;
         }
 
-        public async Task<bool> ResetPasswordRequest(string mailAddress)
+        public async Task<bool> RestPasswordRequest(string mailAddress)
         {
             User userData = await _db.Users.FirstOrDefaultAsync(x => !x.DeletedAt.HasValue && x.MailAddress == mailAddress);
 
@@ -154,6 +154,31 @@ namespace Vega.Services
                 return true;
             }
             
+            return false;
+        }
+
+        public async Task<bool> ResetPasswordPage(int userId, string URL)
+        {
+            Request requestData = await _db.Requests.Where(x => !x.DeletedAt.HasValue && x.URL == URL && x.RequestType == RequestType.ResetPassword && x.CreatedAt.Value.AddHours(1) > DateTime.Now && x.Id == x.UserId).LastOrDefaultAsync();
+
+            if (requestData is not null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> ResetPassword(int Id, string URL, string newPassword)
+        {
+            Request requestData = await _db.Requests.Where(x => !x.DeletedAt.HasValue && x.URL == URL && x.RequestType == RequestType.ResetPassword && x.CreatedAt.Value.AddHours(1) > DateTime.Now && x.Id == x.UserId).LastOrDefaultAsync();
+            if (requestData is not null)
+            {  
+                requestData.User.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+
             return false;
         }
     }
