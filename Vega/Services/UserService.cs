@@ -177,6 +177,7 @@ namespace Vega.Services
             {  
                 requestData.User.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
                 await _db.SaveChangesAsync();
+                await _mailService.ResetPasswordCompleteNotify(requestData);
                 return true;
             }
 

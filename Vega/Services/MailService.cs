@@ -57,7 +57,7 @@ namespace Vega.Services
         public async Task VerificationCompleteNotify(Request requestData)
         {
             mailMessage.Subject = "Vega | Mail Verification Complete";
-            mailMessage.Body = await _viewRenderService.RenderToStringAsync("~/Mailing/VerificationComplete", requestData);
+            mailMessage.Body = await _viewRenderService.RenderToStringAsync("~/Mailing/VerificationComplete.cshtml", requestData);
             mailMessage.To.Add(requestData.User.MailAddress);
             await mailServer.SendMailAsync(mailMessage);
         }
@@ -67,6 +67,14 @@ namespace Vega.Services
             mailMessage.Subject = "Vega | Reset Password";
             mailMessage.Body = await _viewRenderService.RenderToStringAsync("~/Mailing/ResetPassword.cshtml", requestData);
             mailMessage.To.Add(userData.MailAddress);
+            await mailServer.SendMailAsync(mailMessage);
+        }
+
+        public async Task ResetPasswordCompleteNotify(Request requestData)
+        {
+            mailMessage.Subject = "Vega | Your Password has been Changed";
+            mailMessage.Body = await _viewRenderService.RenderToStringAsync("~/Mailing/ResetPasswordComplete.cshtml", requestData);
+            mailMessage.To.Add(requestData.User.MailAddress);
             await mailServer.SendMailAsync(mailMessage);
         }
     }
