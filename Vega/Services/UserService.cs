@@ -129,6 +129,7 @@ namespace Vega.Services
                     userData.MailVerify = true;
                     requestData.DeletedAt = DateTime.Now;
                     await _db.SaveChangesAsync();
+                    await _mailService.VerificationCompleteNotify(requestData);
                     return true;
                 }
             }

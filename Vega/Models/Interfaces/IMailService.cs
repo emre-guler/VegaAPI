@@ -7,6 +7,7 @@ namespace Vega.Interfaces
     {
         Task SendRegisterMail(string mailAddress);
         Task SendVerificationMail(int Id, Request requestData);
+        Task VerificationCompleteNotify(Request requestData);
         Task SendResetPasswordMail(User userData, Request requestData);
     }
 }
