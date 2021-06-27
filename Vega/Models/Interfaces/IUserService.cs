@@ -15,5 +15,6 @@ namespace Vega.Interfaces
         Task<bool> RestPasswordRequest(string mailAddress);
         Task<bool> ResetPasswordPage(int Id, string URL);
         Task<bool> ResetPassword(int Id, string URL, string newPassword);
+        Task<bool> UpdateUser(int Id, RegisterViewModel model);
     }
 }

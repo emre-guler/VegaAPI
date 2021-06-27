@@ -183,5 +183,19 @@ namespace Vega.Services
 
             return false;
         }
+
+        public async Task<bool> UpdateUser(int Id, RegisterViewModel model)
+        {
+            User userData = await _db.Users.Where(x => !x.DeletedAt.HasValue && x.Id == Id).FirstOrDefaultAsync();
+            if (userData is not null)
+            {
+                userData.BirthDate = model.BirthDate;
+                userData.Fullname = model.Fullname;
+                await _db.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

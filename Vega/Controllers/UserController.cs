@@ -199,5 +199,25 @@ namespace Vega.Controllers
 
             return StatusCode((int)ErrorCode.Unauthorized, "Unauthorized");
         }
+
+        [Authorize]
+        [HttpPost("/update-profile")] 
+        public async Task<IActionResult> UpdateUser(RegisterViewModel model)
+        {
+            ClaimsIdentity userClaims = HttpContext.User.Identity as ClaimsIdentity;
+            JwtClaimDto userData = _jwtService.ReadToken(userClaims);
+            if (userData is not null)
+            {
+                bool userControl = await _userService.UpdateUser(userData.Id, model);
+                if(userControl)
+                {
+                    return Ok(true);
+                }
+                
+                return StatusCode((int) ErrorCode.NotFound, "Not found");
+            }
+
+            return StatusCode((int)ErrorCode.Unauthorized, "Unauthorized");
+        }
     }
 }
