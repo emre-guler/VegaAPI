@@ -2,13 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Vega.Data;
 using Vega.DTO;
-using Vega.Entities;
 using Vega.Interfaces;
-using Vega.Models;
 
 namespace Vega.Services
 {

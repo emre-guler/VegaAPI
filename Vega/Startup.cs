@@ -42,6 +42,7 @@ namespace Vega
                 .AddScoped<IMailService, MailService>()
                 .AddScoped<IMethodService, MethodService>()
                 .AddScoped<IContentService, ContentService>()
+                .AddScoped<IAdminService, AdminService>()
                 .AddScoped<ViewRenderService>();
             
             services.AddAutoMapper(typeof(Startup));
