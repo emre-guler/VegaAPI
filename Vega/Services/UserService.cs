@@ -62,7 +62,7 @@ namespace Vega.Services
                     MailVerify = false
                 });
                 await _db.SaveChangesAsync();
-                await _mailService.SendRegisterMail(model.MailAddress);
+                //await _mailService.SendRegisterMail(model.MailAddress);
 
                 return true;
             }
@@ -96,7 +96,7 @@ namespace Vega.Services
             };
             await _db.AddAsync(request);
             await _db.SaveChangesAsync();
-            await _mailService.SendVerificationMail(Id, request);
+            //await _mailService.SendVerificationMail(Id, request);
         }
 
         public async Task<bool> VerfiyPage(int Id, string URL)
@@ -129,7 +129,7 @@ namespace Vega.Services
                     userData.MailVerify = true;
                     requestData.DeletedAt = DateTime.Now;
                     await _db.SaveChangesAsync();
-                    await _mailService.VerificationCompleteNotify(requestData);
+                    //await _mailService.VerificationCompleteNotify(requestData);
                     return true;
                 }
             }
@@ -151,7 +151,7 @@ namespace Vega.Services
                 };
                 await _db.AddAsync(requestData);
                 await _db.SaveChangesAsync();
-                await _mailService.SendResetPasswordMail(userData, requestData);
+                //await _mailService.SendResetPasswordMail(userData, requestData);
                 return true;
             }
             
@@ -177,7 +177,7 @@ namespace Vega.Services
             {  
                 requestData.User.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
                 await _db.SaveChangesAsync();
-                await _mailService.ResetPasswordCompleteNotify(requestData);
+                //await _mailService.ResetPasswordCompleteNotify(requestData);
                 return true;
             }
 
