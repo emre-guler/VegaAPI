@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vega.DTO;
@@ -19,6 +20,7 @@ namespace Vega.Controllers
             _contentService = contentService;
         }
 
+        [Authorize]
         [HttpPost("/most-winners")]
         public async Task<IActionResult> MostWinners([FromBody] int pageSize, int pageNumber)
         {
