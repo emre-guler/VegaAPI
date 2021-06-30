@@ -111,7 +111,7 @@ namespace Vega.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("/mail-verification/{hashedData}/{userId}")]
+        [HttpPost("/reset-password/{hashedData}/{userId}")]
         public async Task<IActionResult>  ResetPassword(string hashedData, int userId, [FromBody] string newPassword)
         {
             if (!string.IsNullOrEmpty(hashedData) && userId != 0 && !string.IsNullOrEmpty(newPassword))
